@@ -1,54 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='user_registration.css') }}">
 </head>
+
 <body>
 
-<div class="registration-container">
-    <h2>User Registration</h2>
-    <form class="registration-form" method="POST" action="">
-        <div class="input-group">
-            <label for="username">User Name:</label>
-            <input type="text" id="username" name="username" required>
-        </div>
+    <div class="registration-container">
+        <h2>User Registration</h2>
+        {% if error %}
+        <p style="color: red;">{{ error }}</p>
+        {% endif %}
+        <form class="registration-form" method="POST" action="">
+            <div class="input-group">
+                <label for="username">User Name:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
 
-        <div class="input-group">
-            <label for="email">User Email ID:</label>
-            <input type="email" id="email" name="email" required>
-        </div>
+            <div class="input-group">
+                <label for="email">User Email ID:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
 
-        <div class="input-group">
-            <label for="phone">User Phone Number:</label>
-            <input type="tel" id="phone" name="phone" required>
-        </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
 
-        <div class="input-group">
-            <label for="address">User Address:</label>
-            <input type="text" id="address" name="address" required>
-        </div>
+            <div class="input-group">
+                <label for="phone">User Phone Number:</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
 
-        <div class="input-group">
-            <label for="pincode">Pin code:</label>
-            <input type="text" id="pincode" name="pincode" required>
-        </div>
+            <div class="input-group">
+                <label for="address">User Address:</label>
+                <input type="text" id="address" name="address" required>
+            </div>
 
-        <div class="input-group">
-            <label for="city">City:</label>
-            <input type="text" id="city" name="city" required>
-        </div>
+            <div class="input-group">
+                <label for="pincode">Pin code:</label>
+                <input type="text" id="pincode" name="pincode" required oninput="fetchLocation()">
+            </div>
 
-        <div class="input-group">
-            <label for="country">Country:</label>
-            <input type="text" id="country" name="country" required>
-        </div>
+            <div class="input-group">
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city" required>
+            </div>
 
-        <button type="submit" class="registration-button">Register</button>
-    </form>
-</div>
+            <div class="input-group">
+                <label for="country">Country:</label>
+                <input type="text" id="country" name="country" required>
+            </div>
+
+            <button type="submit" class="registration-button">Register</button>
+        </form>
+
+        <p><a href="{{ url_for('login_route.login') }}">Login</a></p>
+
+    </div>
+
+    <script>
+        let timeoutId;
+
+        function fetchLocation() {
+
+            // Clear the previous timeout
+            clearTimeout(timeoutId);
+
+            // Set a new timeout
+            timeoutId = setTimeout(() => {
+                const pinCode = document.getElementById('pincode').value;
+
+                // Make an asynchronous request to the Flask endpoint
+                fetch(`/get_location?pin_code=${pinCode}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.statusCode == 1){
+                            document.getElementById('city').value = data.message.city || '';
+                            document.getElementById('country').value = data.message.country || '';
+                        }
+                        else{
+                            console.error(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching location:', error);
+                    });
+            }, 2000);
+        }
+    </script>
 
 </body>
+
 </html>
