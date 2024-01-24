@@ -25,7 +25,7 @@ def get_location():
             address = str(location)
             split_address = address.split(",")
             
-            return jsonify({'statusCode': 1, 'message': {'city': split_address[4], 'country': split_address[5]}})
+            return jsonify({'statusCode': 1, 'message': {'city': split_address[-3], 'country': split_address[-1]}})
         else:
             return jsonify({'statusCode': 0, 'message': 'Location not found'})
     except Exception as error:
