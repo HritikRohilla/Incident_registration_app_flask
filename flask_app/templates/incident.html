@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Incident</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='incident.css') }}">
+</head>
+
+<body>
+
+    <div class="incident-container">
+        <h2>Create Incident</h2>
+        <form class="incident-form" method="POST" action="">
+            <div class="input-group">
+                <label for="incidentType">Incident Type:</label>
+                <select id="incidentType" name="incidentType" required>
+                    <option value="Enterprise">Enterprise</option>
+                    <option value="Government">Government</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="reporterName">Reporter Name:</label>
+                <input type="text" id="reporterName" name="reporterName" required>
+            </div>
+
+            <div class="input-group">
+                <label for="incidentDetails">Incident Details:</label>
+                <textarea id="incidentDetails" name="incidentDetails" required></textarea>
+            </div>
+
+            <div class="input-group">
+                <label for="priority">Priority:</label>
+                <select id="priority" name="priority" required>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="incidentStatus">Incident Status:</label>
+                <select id="incidentStatus" name="incidentStatus" required>
+                    <option value="Open">Open</option>
+                    <option value="In Progress">In Progress</option>
+                    <option value="Closed">Closed</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="phone">User Phone Number:</label>
+                <input type="tel" id="phone" name="phone" required pattern="[6-9]{1}[0-9]{9}" title="Please enter a valid Indian phone number">
+            </div>
+
+            <div class="input-group">
+                <label for="address">User Address:</label>
+                <input type="text" id="address" name="address" required>
+            </div>
+
+            <div class="input-group">
+                <label for="pincode">Pin code:</label>
+                <input type="text" id="pincode" name="pincode" required oninput="fetchLocation()">
+            </div>
+
+            <div class="input-group">
+                <label for="city">City:</label>
+                <input type="text" id="city" name="city" required>
+            </div>
+
+            <div class="input-group">
+                <label for="country">Country:</label>
+                <input type="text" id="country" name="country" required>
+            </div>
+
+            <button type="submit" class="incident-button">Create Incident</button>
+            <br>
+            <button class="incident-button"><a href="{{ url_for('incident_route.home') }}" class="incident-button">Home</a></button>
+            
+        </form>
+    </div>
+
+    <script>
+        let timeoutId;
+
+        function fetchLocation() {
+
+            // Clear the previous timeout
+            clearTimeout(timeoutId);
+
+            // Set a new timeout
+            timeoutId = setTimeout(() => {
+                const pinCode = document.getElementById('pincode').value;
+
+                // Make an asynchronous request to the Flask endpoint
+                fetch(`/get_location?pin_code=${pinCode}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.statusCode == 1) {
+                            document.getElementById('city').value = data.message.city || '';
+                            document.getElementById('country').value = data.message.country || '';
+                        }
+                        else {
+                            console.error(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching location:', error);
+                    });
+            }, 2000);
+        }
+    </script>
+
+</body>
+
+</html>

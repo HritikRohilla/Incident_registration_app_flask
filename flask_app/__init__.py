@@ -18,9 +18,11 @@ def create_app():
     from flask_app.registration_route.registration_route import registration_route
     from flask_app.recover_password.recover_password import recover_password
     from flask_app.get_location_route.get_location_route import get_location_route
+    from flask_app.incident_route.incident_route import incident_route
     
     app.register_blueprint(login_route)
     app.register_blueprint(registration_route)
     app.register_blueprint(recover_password)
     app.register_blueprint(get_location_route)
+    app.register_blueprint(incident_route)
     return app

@@ -1,6 +1,6 @@
-from flask import render_template, url_for, request, flash, redirect, Blueprint, abort
-from flask_app.common_functiom import hash_password
 from flask_app.models import db, User
+from flask_app.common_functiom import hash_password
+from flask import render_template, url_for, request, flash, redirect, Blueprint, abort
 
 registration_route = Blueprint('registration_route', __name__)
 
@@ -22,7 +22,7 @@ def register():
         if existing_user:
             return render_template('user_registration.html', error='Username or email already exists')
 
-        # Create a new user
+        # Creating a new user
         new_user = User(username=username, email=email, password=password, phone=phone, address=address, pincode=pincode, city=city, country=country)
 
         # Add the new user to the database

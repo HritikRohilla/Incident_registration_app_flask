@@ -33,7 +33,7 @@
 
             <div class="input-group">
                 <label for="phone">User Phone Number:</label>
-                <input type="tel" id="phone" name="phone" required>
+                <input type="tel" id="phone" name="phone" required pattern="[6-9]{1}[0-9]{9}" title="Please enter a valid Indian phone number">
             </div>
 
             <div class="input-group">
@@ -79,6 +79,7 @@
                 fetch(`/get_location?pin_code=${pinCode}`)
                     .then(response => response.json())
                     .then(data => {
+                        console.log(data);
                         if(data.statusCode == 1){
                             document.getElementById('city').value = data.message.city || '';
                             document.getElementById('country').value = data.message.country || '';
