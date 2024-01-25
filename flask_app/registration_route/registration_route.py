@@ -4,7 +4,6 @@ from flask import render_template, url_for, request, flash, redirect, Blueprint,
 
 registration_route = Blueprint('registration_route', __name__)
 
-# Your existing routes
 @registration_route.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -25,7 +24,7 @@ def register():
         # Creating a new user
         new_user = User(username=username, email=email, password=password, phone=phone, address=address, pincode=pincode, city=city, country=country)
 
-        # Add the new user to the database
+        # storing data into the database
         db.session.add(new_user)
         db.session.commit()
         flash('Registration succesful. Please Login')

@@ -13,12 +13,11 @@ def login():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        # Check if the user exists in the database
+        # Checking if the user exists in the database
         user = User.query.filter_by(email=email).first()
 
         if user and verify_password(password, user.password):
 
-            # You can store user information in the session for future use
             session['user_id'] = user.id
             session['username'] = user.username
 
@@ -26,7 +25,6 @@ def login():
             return redirect(url_for('incident_route.home'))
 
         else:
-            # Incorrect username or password
             flash('Wrong credential. Please try again.')
 
     return render_template('user_login.html')

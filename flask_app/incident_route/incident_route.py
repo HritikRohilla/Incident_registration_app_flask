@@ -31,7 +31,7 @@ def incident():
         # getting user_id from session
         user_id = session['user_id']
 
-        # Create and add the new incident to the database
+        # Creating and add the new incident to the database
         new_incident = Incident(
             id=incident_id,
             incident_type=incident_type,
@@ -54,7 +54,6 @@ def incident():
         return redirect(url_for('incident_route.home'))
     return render_template('incident.html')
 
-# Route to display incidents for the logged-in user
 @incident_route.route('/home')
 @login_required
 def home():
@@ -89,7 +88,7 @@ def edit_incident(incident_id):
     return render_template('edit_incident.html', incident=incident)
 
 
-
+# TODO for now this route is open but user can search from UI also
 @incident_route.route('/search_incident/<incident_id>', methods=['GET'])
 # @login_required
 def search_incident(incident_id):
@@ -101,4 +100,4 @@ def search_incident(incident_id):
     # Removing attributes that has ' _ ' in string
     incident_data = {key: value for key, value in incident_data.items() if not key.startswith('_')}
 
-    return jsonify(incident_data)
+    return jsonify(incident_data), 200
